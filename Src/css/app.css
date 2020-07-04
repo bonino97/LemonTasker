@@ -78,7 +78,7 @@ body {
     padding: 2rem;
     text-transform: uppercase;
     border: none;
-    font-weight: 900;
+    font-weight: 800;
     width: 250px;
     margin:0  auto;
 
@@ -87,8 +87,8 @@ body {
     line-height: 0;
 }
 .boton span {
-    font-size: 2.2rem;
-    margin-left: 20px;
+    font-size: 2.0rem;
+    margin-left: 15px;
 }
 
 .boton:hover {
