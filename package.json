@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "express-validator": "^6.6.0",
     "mysql2": "^2.1.0",
     "pug": "^3.0.0",
-    "sequelize": "^6.2.4"
+    "sequelize": "^6.2.4",
+    "slug": "^3.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
