@@ -14,16 +14,15 @@ html(lang="en")
         main.contenedor 
             aside.contenedor-proyectos
                 .panel
-                    a(href="/nuevo-proyecto" class="boton") Cerrar Sesion
+                    a(href="/nuevo-proyecto" class="boton") Nuevo Proyecto
                         span +
                 .panel.lista-proyectos
                     h2 Proyectos 
                     ul#proyectos.proyectos
-                        li
-                            a(href="#") Diseño de Tienda Virtual
-                        li
-                            a(href="#") Diseño de Nuevo Blog
-                        li
-                            a(href="#") Diseño de Logotipo
+                        if(proyectos.length)
+                            each proyecto in proyectos
+                                li
+                                    a(href=`/proyectos/${proyecto.url}`)= proyecto.nombre
 
             block Contenido
+            //- pre= vardump(proyectos)
