@@ -20,6 +20,9 @@ module.exports = ()=> {
     router.get('/nuevo-proyecto', ProyectosController.FormularioProyecto);
     // Listar Proyecto
     router.get('/proyectos/:url', ProyectosController.ProyectoPorUrl);
+    // Editar Proyecto
+    router.get('/proyecto/editar/:id', ProyectosController.EditarProyecto);
+
 
     //POST
     router.post(

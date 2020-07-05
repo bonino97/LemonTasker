@@ -76,3 +76,7 @@ exports.ProyectoPorUrl = async (req,res) => {
         proyectos
     })
 }
+
+exports.EditarProyecto = async (req,res) => {
+    
+}
