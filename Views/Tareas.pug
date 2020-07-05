@@ -2,4 +2,14 @@ extends Layout
 
 block Contenido
     .contenido-principal
-        h1 #{nombrePagina}
+        h1 #{nombrePagina} - #{proyecto.nombre}
+
+        //ToDo - Formulario Aqui
+
+        //ToDo - Listado de Pendientes
+
+        //Acciones que se pueden realizar
+
+        .contenedor-acciones    
+            a(href="#" class="boton") Editar Proyecto
+            button#eliminar-proyecto(type="button" class="boton eliminar") Eliminar Proyecto
