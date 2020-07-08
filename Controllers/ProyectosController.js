@@ -35,13 +35,13 @@ exports.NuevoProyecto = async (req,res) => {
         }
 
         if(errores.length > 0){
-            res.render('nuevoProyecto', {
+            res.render('NuevoProyecto', {
                 nombrePagina: 'Nuevo Proyecto', 
                 errores,
                 proyectos
             });
         } else {
-            const proyecto = await Proyectos.create({ nombre });
+            await Proyectos.create({ nombre });
             res.redirect('/');
         }
     } catch (ex) {
@@ -52,7 +52,7 @@ exports.NuevoProyecto = async (req,res) => {
 
         console.error(ex);
 
-        res.render('nuevoProyecto', {
+        res.render('NuevoProyecto', {
             nombrePagina: 'Nuevo Proyecto', 
             errores,
             proyectos
@@ -61,16 +61,19 @@ exports.NuevoProyecto = async (req,res) => {
 }
 
 exports.ProyectoPorUrl = async (req,res) => {
-    const proyectos = await Proyectos.findAll();
-    const proyecto = await Proyectos.findOne({
+
+    const proyectosPromise = Proyectos.findAll();
+    const proyectoPromise = Proyectos.findOne({
         where: {
             url: req.params.url
         }
     });
 
+    const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise])
+
     if(!proyecto) return next();
 
-    res.render('tareas', {
+    res.render('Tareas', {
         nombrePagina: 'Tareas del Proyecto',
         proyecto,
         proyectos
@@ -78,5 +81,64 @@ exports.ProyectoPorUrl = async (req,res) => {
 }
 
 exports.EditarProyecto = async (req,res) => {
-    
+
+    const proyectosPromise = Proyectos.findAll();
+    const proyectoPromise = Proyectos.findOne({
+        where: {
+            id: req.params.id
+        }
+    });
+
+    const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise])
+
+    //Render a la vista
+    res.render('NuevoProyecto', {
+        nombrePagina: 'Editar Proyecto',
+        proyectos,
+        proyecto
+    });
+
+}
+
+exports.ActualizarProyecto = async (req,res) => {
+    const proyectos = await Proyectos.findAll();
+    var errores = [];
+
+    try { 
+        //Validar que tengamos algo en el input.
+        const nombre = req.body.nombre;
+        
+        var errores = [];
+
+        if(!nombre || nombre === ''){
+            errores.push({'texto': 'Agrega Nombre al Proyecto'});
+        }
+
+        if(errores.length > 0){
+            res.render('NuevoProyecto', {
+                nombrePagina: 'Nuevo Proyecto', 
+                errores,
+                proyectos
+            });
+        } else {
+            await Proyectos.update( 
+                { nombre: nombre }, 
+                { where: { id: req.params.id } });
+                
+            res.redirect('/');
+        }
+    } catch (ex) {
+        
+        if(ex){
+            errores.push({'texto': 'Error al agregar el Proyecto'});
+        }
+
+        console.error(ex);
+
+        res.render('NuevoProyecto', {
+            nombrePagina: 'Nuevo Proyecto', 
+            errores,
+            proyectos
+        });
+    }
 }
