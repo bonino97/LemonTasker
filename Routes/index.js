@@ -31,5 +31,11 @@ module.exports = ()=> {
         ProyectosController.NuevoProyecto
     );
 
+    router.post(
+        '/nuevo-proyecto/:id', 
+        body('nombre').not().isEmpty().trim().escape(),
+        ProyectosController.ActualizarProyecto
+    );
+
     return router;
 }
