@@ -14,8 +14,9 @@ db.sync()
     .then(() => console.log('DB Conectada al Servidor.'))
     .catch( error => console.log(error))
 
-// Importar el modelo
+// Importar los modelos
 require('./Models/Proyectos');
+require('./Models/Tareas');
 
 // Crear una App de Express.
 const app = express(); 
