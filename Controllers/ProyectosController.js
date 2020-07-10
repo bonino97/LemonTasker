@@ -1,9 +1,10 @@
 const Proyectos = require('../Models/Proyectos');
+const Tareas = require('../Models/Tareas');
 
 exports.Home = async (req,res) => {
     
     const proyectos = await Proyectos.findAll();
-
+ 
     res.render('Index', { // Llama al View llamado 'Index'
         nombrePagina: 'Proyectos',
         proyectos
@@ -71,12 +72,20 @@ exports.ProyectoPorUrl = async (req,res) => {
 
     const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise])
 
+    //Consultar Tareas del Proyecto actual
+    const tareas = await Tareas.findAll({
+        where: {
+            proyectoId: proyecto.id
+        }
+    })
+
     if(!proyecto) return next();
 
     res.render('Tareas', {
         nombrePagina: 'Tareas del Proyecto',
         proyecto,
-        proyectos
+        proyectos,
+        tareas
     })
 }
 
@@ -91,11 +100,19 @@ exports.EditarProyecto = async (req,res) => {
 
     const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise])
 
+    //Consultar Tareas del Proyecto actual
+    const tareas = await Tareas.findAll({
+        where: {
+            proyectoId: proyecto.id
+        }
+    })
+
     //Render a la vista
     res.render('NuevoProyecto', {
         nombrePagina: 'Editar Proyecto',
         proyectos,
-        proyecto
+        proyecto,
+        tareas
     });
 
 }
@@ -138,7 +155,19 @@ exports.ActualizarProyecto = async (req,res) => {
         res.render('NuevoProyecto', {
             nombrePagina: 'Nuevo Proyecto', 
             errores,
-            proyectos
+            proyectos,
+            tareas
         });
     }
+}
+
+exports.EliminarProyecto = async (req,res, next) => {
+
+    const urlProyecto = req.params.url;
+
+    const resultado = await Proyectos.destroy({where: {url: urlProyecto}});
+
+    if(!resultado) return next();
+
+    res.status(200).send('Proyecto eliminado correctamente.')
 }
