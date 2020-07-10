@@ -5,10 +5,11 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", href="/css/normalize.css")
         link(rel="stylesheet", href="/css/app.css")
+        script(src='https://kit.fontawesome.com/d10383ab02.js' crossorigin='anonymous')
         title #{nombrePagina}
     body
         header.barra
-            h1 UpTask - Administrador de Proyectos
+            h1 LemonTasker - Administrador de Proyectos
             a(href="#") Cerrar Sesion
         
         main.contenedor 
@@ -20,9 +21,12 @@ html(lang="en")
                     h2 Proyectos 
                     ul#proyectos.proyectos
                         if(proyectos.length)
-                            each proyecto in proyectos
+                            each proyecto in proyectos 
                                 li
                                     a(href=`/proyectos/${proyecto.url}`)= proyecto.nombre
 
             block Contenido
             //- pre= vardump(proyectos)
+
+
+        script(src="/dist/bundle.js")
