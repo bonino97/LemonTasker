@@ -198,7 +198,7 @@ body.index {
     width: 90%;
     background-color: #607D8B;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 4rem;
     color: white;
     transition: background-color .5s ease-in-out;
 }
@@ -334,4 +334,8 @@ form input[type="submit"]{
     margin: 0;
     text-align: center;
     display: block;
+}
+
+.nueva-tarea{
+    float: right;
 }
