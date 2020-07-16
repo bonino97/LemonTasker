@@ -1,4 +1,5 @@
 const Usuarios = require('../Models/Usuarios');
+const enviarEmail = require('../Handlers/Email');
 
 exports.PaginaRegistro = async (req,res) => {
     res.render('CrearCuenta', {
@@ -25,6 +26,24 @@ exports.CrearCuenta = async (req,res) => {
             password
         });
 
+        //Crear una URL para confirmar usuario
+        const confirmarUrl = `http://${req.headers.host}/confirmar/${email}`;
+
+        //Crear el objeto de usuario 
+        const usuario = {
+            email
+        }
+
+        //Enviar mail
+        await enviarEmail.EnviarCorreo({
+            usuario,
+            subject: 'Confirmar Cuenta',
+            confirmarUrl ,
+            archivo: 'ConfirmarCuenta'
+        });
+
+        //Redirigir al usuario
+        req.flash('correcto', 'Ya estas casi listo, verifica tu mail y confirma tu cuenta.')
         res.redirect('/iniciar-sesion');
 
     } catch (error) {
@@ -36,4 +55,30 @@ exports.CrearCuenta = async (req,res) => {
             password
         })
     }
+}
+
+exports.PaginaReestablecerPassword = (req,res) => {
+    res.render('ReestablecerContraseña', {
+        nombrePagina: 'Reestablecer Contraseña',
+    })
+}
+
+exports.ConfirmarCuenta = async (req, res) => {
+    const usuario = await Usuarios.findOne({
+        where: {
+            email: req.params.correo
+        }
+    })
+    console.log(usuario);
+    if(!usuario){
+        console.log('asdasdasd');
+        req.flash('error', 'Cuenta inexistente');
+        res.redirect('/crear-cuenta');
+    }
+
+    usuario.activo = 1;
+    await usuario.save();
+
+    req.flash('correcto', 'Cuenta creada correctamente.');
+    res.redirect('/iniciar-sesion');
 }
