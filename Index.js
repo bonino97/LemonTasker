@@ -66,7 +66,6 @@ app.use((req, res, next) => {
     res.locals.vardump = helpers.vardump;
     res.locals.mensajes = req.flash();
     res.locals.usuarios = {...req.user} || null;
-    
     next();
 });
 
@@ -74,3 +73,5 @@ app.use((req, res, next) => {
 app.use('/', routes());
 
 app.listen(3000);
+
+require('./Handlers/Email');
