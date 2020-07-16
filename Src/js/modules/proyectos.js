@@ -35,7 +35,7 @@ if(btnEliminar){
                   )
         
                   setTimeout(() => {
-                      location.href = "/"
+                      location.href = "/nuevo-proyecto"
                   }, 1500);  
                 })
                 .catch( () => {
