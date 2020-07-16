@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        include Partials/Header
+    body.login
+        .contenedor-formulario
+            h1= nombrePagina
+            p Coloca tu Nueva Contraseña
+            //- if locals.mensajes
+            //-     .alertas
+            //-         each categoria in Object.keys(locals.mensajes)
+            //-             each error in mensajes[categoria]
+            //-                 .alerta(class=`${categoria}`)
+            //-                     p= error
+                                
+            form.caja-login(method="POST")
+                .campo
+                    label(for="password") Contraseña:
+                    input(type="password" name="password" placeholder="Contraseña: " value=password)
+                .campo.enviar
+                    input.boton(type="submit" value="Reestablecer Contraseña")
