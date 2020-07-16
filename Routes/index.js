@@ -13,6 +13,7 @@ const AuthController = require('../Controllers/AuthController');
 
 //Importar Modelos
 const Proyectos = require('../Models/Proyectos');
+const Usuarios = require('../Models/Usuarios');
 
 module.exports = ()=> {
 
@@ -59,16 +60,23 @@ module.exports = ()=> {
     /* Rutas Usuarios Controller*/
     //GET
     router.get('/crear-cuenta', UsuariosController.PaginaRegistro);
-    //GET
     router.get('/iniciar-sesion', UsuariosController.PaginaLogin);
+    router.get('/reestablecer-password', UsuariosController.PaginaReestablecerPassword);
+    router.get('/confirmar/:correo', UsuariosController.ConfirmarCuenta);
 
     //POST
     router.post('/crear-cuenta', UsuariosController.CrearCuenta);
-    
-    /* Rutas Auth Controller*/
-    router.post('/iniciar-sesion', AuthController.AutenticarUsuario);
 
+
+    /* Rutas Auth Controller*/
+    //GET
     router.get('/cerrar-sesion', AuthController.CerrarSesion);
+    router.get('/reestablecer-password/:token', AuthController.ValidarToken);
+
+    //POST
+    router.post('/iniciar-sesion', AuthController.AutenticarUsuario);
+    router.post('/reestablecer-password', AuthController.EnviarToken);
+    router.post('/reestablecer-password/:token', AuthController.ActualizarPassword);
 
     return router;
 }
