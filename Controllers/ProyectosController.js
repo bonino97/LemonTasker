@@ -2,8 +2,8 @@ const Proyectos = require('../Models/Proyectos');
 const Tareas = require('../Models/Tareas');
 
 exports.Home = async (req,res) => {
-    
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuarios.id;
+    const proyectos = await Proyectos.findAll({ where: { usuarioId } });
  
     res.render('Index', { // Llama al View llamado 'Index'
         nombrePagina: 'Proyectos',
@@ -13,7 +13,8 @@ exports.Home = async (req,res) => {
 
 exports.FormularioProyecto = async (req,res) => {
     
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuarios.id;
+    const proyectos = await Proyectos.findAll({ where: { usuarioId } });
 
     res.render('NuevoProyecto', { 
         nombrePagina: 'Nuevo Proyecto',
@@ -22,7 +23,9 @@ exports.FormularioProyecto = async (req,res) => {
 }
 
 exports.NuevoProyecto = async (req,res) => {
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuarios.id;
+    const proyectos = await Proyectos.findAll({ where: { usuarioId } });
+
     var errores = [];
 
     try { 
@@ -42,12 +45,13 @@ exports.NuevoProyecto = async (req,res) => {
                 proyectos
             });
         } else {
-            await Proyectos.create({ nombre });
-            res.redirect('/');
+            //Inserto en la BD
+            const proyecto = await Proyectos.create({ nombre, usuarioId });
+            res.redirect(`/proyectos/${proyecto.url}`);
         }
     } catch (ex) {
         
-        if(ex){
+        if(ex){ 
             errores.push({'texto': 'Error al agregar el Proyecto'});
         }
 
@@ -62,11 +66,12 @@ exports.NuevoProyecto = async (req,res) => {
 }
 
 exports.ProyectoPorUrl = async (req,res) => {
-
-    const proyectosPromise = Proyectos.findAll();
+    const usuarioId = res.locals.usuarios.id;
+    const proyectosPromise = Proyectos.findAll({ where: { usuarioId } });
     const proyectoPromise = Proyectos.findOne({
         where: {
-            url: req.params.url
+            url: req.params.url,
+            usuarioId
         }
     });
 
@@ -90,11 +95,12 @@ exports.ProyectoPorUrl = async (req,res) => {
 }
 
 exports.EditarProyecto = async (req,res) => {
-
-    const proyectosPromise = Proyectos.findAll();
+    const usuarioId = res.locals.usuarios.id;
+    const proyectosPromise = Proyectos.findAll({ where: { usuarioId } });
     const proyectoPromise = Proyectos.findOne({
         where: {
-            id: req.params.id
+            id: req.params.id,
+            usuarioId
         }
     });
 
@@ -118,7 +124,8 @@ exports.EditarProyecto = async (req,res) => {
 }
 
 exports.ActualizarProyecto = async (req,res) => {
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuarios.id;
+    const proyectos = await Proyectos.findAll({ where: { usuarioId } });
     var errores = [];
 
     try { 
@@ -162,12 +169,12 @@ exports.ActualizarProyecto = async (req,res) => {
 }
 
 exports.EliminarProyecto = async (req,res, next) => {
-
+    const usuarioId = res.locals.usuarios.id;
     const urlProyecto = req.params.url;
 
-    const resultado = await Proyectos.destroy({where: {url: urlProyecto}});
+    const resultado = await Proyectos.destroy({where: {url: urlProyecto, usuarioId}});
 
     if(!resultado) return next();
 
-    res.status(200).send('Proyecto eliminado correctamente.')
+    res.status(200).send('Proyecto eliminado correctamente.');
 }
